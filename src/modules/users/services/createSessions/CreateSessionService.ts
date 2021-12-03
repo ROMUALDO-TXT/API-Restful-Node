@@ -1,3 +1,4 @@
+import auth from '@config/auth';
 import User from '@modules/users/typeorm/entities/User';
 import UsersRepository from '@modules/users/typeorm/repositories/UsersRepository';
 import AppError from '@shared/errors/AppError';
@@ -28,9 +29,9 @@ class CreateSessionService {
       throw new AppError('Email e/ou senha incorretos!');
     }
 
-    const token = sign({}, '1980079f11a39b8c53aba66e1d607388', {
+    const token = sign({}, auth.jwt.secret, {
       subject: user.id,
-      expiresIn: '1d',
+      expiresIn: auth.jwt.expiresIn,
     });
 
     return { user, token };
