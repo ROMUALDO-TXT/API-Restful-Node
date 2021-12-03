@@ -1,0 +1,14 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 3003,
+  "username": "root",
+  "passwort": "12345",
+  "database": "apirest-test",
+  "migrations": [
+    "./src/shared/typeorm/migrations/*.ts"
+  ],
+  "cli":{
+    "migrationsDir": "./src/shared/typeorm/migrations"
+  }
+}
