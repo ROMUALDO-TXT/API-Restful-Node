@@ -5,6 +5,7 @@ import passwordRouter from '@modules/users/routes/Passwords.routes';
 import { Router } from 'express';
 import profileRouter from '@modules/users/routes/Profile.routes';
 import customersRouter from '@modules/costumers/routes/Customers.routes';
+import ordersRouter from '@modules/orders/routes/Orders.routes';
 
 const routes = Router();
 
@@ -19,6 +20,8 @@ routes.use('/passwords', passwordRouter);
 routes.use('/profile', profileRouter);
 
 routes.use('/customers',customersRouter)
+
+routes.use('/orders', ordersRouter);
 
 routes.get('/', (request, response) => {
   return response.json({ message: 'hello world' });
