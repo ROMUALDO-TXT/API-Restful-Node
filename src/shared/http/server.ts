@@ -6,6 +6,7 @@ import routes from './routes';
 import AppError from '@shared/errors/AppError';
 import { errors } from 'celebrate';
 import upload from '@config/upload';
+import '@shared/typeorm';
 
 const app = express();
 
