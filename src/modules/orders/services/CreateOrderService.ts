@@ -1,20 +1,14 @@
-
-import { CustomersRepository } from '@modules/costumers/typeorm/repositories/CustomersRepository';
-import IProduct from '@modules/products/dtos/IProduct';
-import { ProductRepository } from '@modules/products/typeorm/repositories/ProductRepository';
+import { CustomersRepository } from '@modules/costumers/infra/typeorm/repositories/CustomersRepository';
+import { ProductRepository } from '@modules/products/infra/typeorm/repositories/ProductRepository';
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
-import Order from '../typeorm/entities/Order';
-import OrdersRepository from '../typeorm/repositories/OrdersRepository';
+import { ICreateOrder } from '../domain/models/ICreateOrder';
+import Order from '../infra/typeorm/entities/Order';
+import OrdersRepository from '../infra/typeorm/repositories/OrdersRepository';
 
-
-interface IRequest {
-  customer_id: string;
-  products: IProduct[];
-}
 
 class CreateOrderService {
-  public async execute({ customer_id, products }: IRequest): Promise<Order> {
+  public async execute({ customer_id, products }: ICreateOrder): Promise<Order> {
     const ordersRepository = getCustomRepository(OrdersRepository);
     const customersRepository = getCustomRepository(CustomersRepository);
     const productsRepository = getCustomRepository(ProductRepository);
