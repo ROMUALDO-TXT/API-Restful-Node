@@ -1,5 +1,6 @@
 import Product from '@modules/products/typeorm/entities/Product';
 import { ProductRepository } from '@modules/products/typeorm/repositories/ProductRepository';
+import RedisCache from '@shared/cache/RedisCache';
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
 
@@ -13,6 +14,7 @@ class CreateProductService {
   public async execute({ name, price, quantity }: IRequest): Promise<Product> {
     const productRepository = getCustomRepository(ProductRepository);
     const productExists = await productRepository.findByName(name);
+    const redisCache = new RedisCache();
 
     if (productExists) {
       throw new AppError('Product already exists!');
@@ -23,6 +25,8 @@ class CreateProductService {
       price,
       quantity,
     });
+
+    await redisCache.invalidate('api-teste-PRODUCTS_LIST');
 
     await productRepository.save(product);
 

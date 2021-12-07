@@ -1,5 +1,6 @@
 import Product from '@modules/products/typeorm/entities/Product';
 import { ProductRepository } from '@modules/products/typeorm/repositories/ProductRepository';
+import RedisCache from '@shared/cache/RedisCache';
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
 
@@ -18,7 +19,7 @@ class UpdateProductService {
     quantity,
   }: IRequest): Promise<Product> {
     const productsRepository = getCustomRepository(ProductRepository);
-
+    const redisCache = new RedisCache();
     const product = await productsRepository.findOne(id);
 
     if (!product) {
@@ -34,7 +35,7 @@ class UpdateProductService {
     product.name = name;
     product.price = price;
     product.quantity = quantity;
-
+    redisCache.invalidate('api-teste-PRODUCTS_LIST');
     await productsRepository.save(product);
 
     return product;
