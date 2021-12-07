@@ -1,22 +1,15 @@
 import auth from '@config/auth';
-import User from '@modules/users/typeorm/entities/User';
-import UsersRepository from '@modules/users/typeorm/repositories/UsersRepository';
+import User from '@modules/users/infra/typeorm/entities/User';
+import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import AppError from '@shared/errors/AppError';
 import { compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
+import { Secret, sign } from 'jsonwebtoken';
 import { getCustomRepository } from 'typeorm';
+import { ICreateSessionRequest, ICreateSessionResponse } from '../domain/models/ICreateSession';
 
-interface IRequest {
-  email: string;
-  password: string;
-}
-interface IResponse {
-  user: User;
-  token: string;
-}
 
 class CreateSessionService {
-  public async execute({ email, password }: IRequest): Promise<IResponse> {
+  public async execute({ email, password }: ICreateSessionRequest): Promise<ICreateSessionResponse> {
     const usersRepository = getCustomRepository(UsersRepository);
     const user = await usersRepository.findByEmail(email);
     if (!user) {
@@ -29,7 +22,7 @@ class CreateSessionService {
       throw new AppError('Email e/ou senha incorretos!');
     }
 
-    const token = sign({}, auth.jwt.secret, {
+    const token = sign({}, auth.jwt.secret as Secret, {
       subject: user.id,
       expiresIn: auth.jwt.expiresIn,
     });

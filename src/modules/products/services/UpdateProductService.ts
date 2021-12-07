@@ -1,15 +1,9 @@
-import Product from '@modules/products/typeorm/entities/Product';
-import { ProductRepository } from '@modules/products/typeorm/repositories/ProductRepository';
+import Product from '@modules/products/infra/typeorm/entities/Product';
+import { ProductRepository } from '@modules/products/infra/typeorm/repositories/ProductRepository';
 import RedisCache from '@shared/cache/RedisCache';
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
-
-interface IRequest {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
+import { IUpdateProduct } from '../domain/models/IUpdateProduct';
 
 class UpdateProductService {
   public async execute({
@@ -17,7 +11,7 @@ class UpdateProductService {
     name,
     price,
     quantity,
-  }: IRequest): Promise<Product> {
+  }: IUpdateProduct): Promise<Product> {
     const productsRepository = getCustomRepository(ProductRepository);
     const redisCache = new RedisCache();
     const product = await productsRepository.findOne(id);

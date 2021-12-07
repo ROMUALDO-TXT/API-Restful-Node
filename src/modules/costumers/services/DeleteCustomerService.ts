@@ -1,14 +1,14 @@
-
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
-import { CustomersRepository } from '../typeorm/repositories/CustomersRepository';
+import { IDeleteCustomer } from '../domain/models/IDeleteCustomer';
+import { CustomersRepository } from '../infra/typeorm/repositories/CustomersRepository';
 
 interface IRequest {
   id: string;
 }
 
 class DeleteCustomerService {
-  public async execute({ id }: IRequest): Promise<void> {
+  public async execute({ id }: IDeleteCustomer): Promise<void> {
     const customersRepository = getCustomRepository(CustomersRepository);
 
     const customer = await customersRepository.findOne(id);

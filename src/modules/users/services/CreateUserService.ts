@@ -1,31 +1,31 @@
-import AppError from "@shared/errors/AppError";
-import { hash } from "bcryptjs";
-import { getCustomRepository } from "typeorm";
-import User from "../typeorm/entities/User";
-import UsersRepository from "../typeorm/repositories/UsersRepository";
+import AppError from '@shared/errors/AppError';
+import { hash } from 'bcryptjs';
+import { getCustomRepository } from 'typeorm';
+import { ICreateUser } from '../domain/models/ICreateUser';
+import User from '../infra/typeorm/entities/User';
+import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 
-interface IRequest{
-  name: string;
-  email: string;
-  password: string;
-}
 
-class CreateUserService{
-  public async execute({name, email, password}: IRequest):Promise<User | undefined>{
+class CreateUserService {
+  public async execute({
+    name,
+    email,
+    password,
+  }: ICreateUser): Promise<User | undefined> {
     const usersRepository = getCustomRepository(UsersRepository);
     const emailExists = await usersRepository.findByEmail(email);
 
-    if(emailExists){
-      throw new AppError("Email alreeady in use!");
+    if (emailExists) {
+      throw new AppError('Email alreeady in use!');
     }
 
-    const hashedPassword =  await hash(password, 8);
+    const hashedPassword = await hash(password, 8);
 
     const user = usersRepository.create({
       name,
       email,
       password: hashedPassword,
-    })
+    });
 
     await usersRepository.save(user);
 
