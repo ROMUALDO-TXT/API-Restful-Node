@@ -1,6 +1,7 @@
-import Customer from '../../infra/typeorm/entities/Customer';
+import { IProduct } from "./IProduct";
 
-interface IPaginateCustomer {
+
+export interface IProductPaginate {
   from: number;
   to: number;
   per_page: number;
@@ -8,6 +9,5 @@ interface IPaginateCustomer {
   current_page: number;
   prev_page: number | null;
   next_page: number | null;
-  data: Customer[];
+  data: IProduct[];
 }
-export default IPaginateCustomer;

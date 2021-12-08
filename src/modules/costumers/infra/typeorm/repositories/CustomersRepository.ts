@@ -1,8 +1,9 @@
+import { ICustomersRepository } from '@modules/costumers/domain/repositories/ICustomersRepository';
 import { EntityRepository, Repository } from 'typeorm';
 import Customer from '../entities/Customer';
 
 @EntityRepository(Customer)
-export class CustomersRepository extends Repository<Customer> {
+export class CustomersRepository extends Repository<Customer> implements ICustomersRepository {
   public async findByName(name: string): Promise<Customer | undefined> {
     const customer = this.findOne({
       where: {
@@ -32,4 +33,6 @@ export class CustomersRepository extends Repository<Customer> {
 
     return customer;
   }
+
+  
 }
