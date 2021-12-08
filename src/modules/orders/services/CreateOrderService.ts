@@ -1,14 +1,16 @@
 import { CustomersRepository } from '@modules/costumers/infra/typeorm/repositories/CustomersRepository';
+import { IProduct } from '@modules/products/domain/models/IProduct';
 import { ProductRepository } from '@modules/products/infra/typeorm/repositories/ProductRepository';
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
-import { ICreateOrder } from '../domain/models/ICreateOrder';
+import IProductOrder from '../domain/models/IProductOrder';
+import { IRequestCreateOrder } from '../domain/models/IRequestCreateOrder';
 import Order from '../infra/typeorm/entities/Order';
 import OrdersRepository from '../infra/typeorm/repositories/OrdersRepository';
 
 
 class CreateOrderService {
-  public async execute({ customer_id, products }: ICreateOrder): Promise<Order> {
+  public async execute({ customer_id, products }: IRequestCreateOrder): Promise<Order> {
     const ordersRepository = getCustomRepository(OrdersRepository);
     const customersRepository = getCustomRepository(CustomersRepository);
     const productsRepository = getCustomRepository(ProductRepository);
@@ -70,7 +72,7 @@ class CreateOrderService {
         product.quantity,
     }));
 
-    await productsRepository.save(updatedProductQuantity);
+    await productsRepository.updateStock(updatedProductQuantity);
 
     return order;
   }

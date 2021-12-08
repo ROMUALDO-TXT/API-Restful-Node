@@ -8,6 +8,7 @@ export interface ICustomersRepository{
     findByEmail(email: string):Promise<ICustomer | undefined>;
     findAll(): Promise<ICustomer[]>;
     findAllPaginate(search: string, sortField: string): Promise<ICustomerPaginate>;
-    //create(data: ICreateCustomer): Promise<ICustomer>;
-    //save(customer: ICustomer): Promise<ICustomer>;
+    create(data: ICreateCustomer): Promise<ICustomer>;
+    save(customer: ICustomer): Promise<ICustomer>;
+    remove(customer: ICustomer): Promise<void>;
 }

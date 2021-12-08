@@ -1,5 +1,5 @@
 import { ICreateProduct } from "../models/ICreateProduct";
-import IFindProducts from "../models/IFindProducts";
+import { IFindProducts } from "../models/IFindProducts";
 import { IProduct } from "../models/IProduct";
 import { IProductPaginate } from "../models/IProductPaginate";
 import { IUpdateStock } from "../models/IUpdateStock";

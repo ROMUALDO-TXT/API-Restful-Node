@@ -8,6 +8,6 @@ export interface IUserRepository{
     findByName(name: string): Promise<IUser | undefined>;
     findAll(): Promise<IUser[]>;
     findAllPaginate(search: string, sortField: string): Promise<IUserPaginate>;
-    create(data: ICreateUser): Promise<IUser>
-    save(user: IUser): Promise<IUser>
+    create(data: ICreateUser): Promise<IUser>;
+    save(user: IUser): Promise<IUser>;
 }

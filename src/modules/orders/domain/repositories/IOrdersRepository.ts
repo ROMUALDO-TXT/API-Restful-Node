@@ -5,5 +5,5 @@ import { IOrderPaginate } from "../models/IOrderPaginate";
 export interface IOrdersRepository{
     findById(id: string):Promise<IOrder | undefined>;
     findAllPaginate(): Promise<IOrderPaginate>;
-    create(data: ICreateOrder): Promise<IOrder>;
+    createOrder(data: ICreateOrder): Promise<IOrder>;
 }
