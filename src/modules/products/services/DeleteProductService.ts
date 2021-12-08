@@ -1,23 +1,23 @@
-import { ProductRepository } from '@modules/products/infra/typeorm/repositories/ProductRepository';
 import RedisCache from '@shared/cache/RedisCache';
 import AppError from '@shared/errors/AppError';
-import { getCustomRepository } from 'typeorm';
 import { IDeleteProduct } from '../domain/models/IDeleteProduct';
+import { IProductsRepository } from '../domain/repositories/IProductsRepository';
 
 
 
 class DeleteProductService {
+  constructor(private productsRepository: IProductsRepository){}
+
   public async execute({ id }: IDeleteProduct): Promise<void> {
-    const productsRepository = getCustomRepository(ProductRepository);
     const redisCache = new RedisCache();
-    const product = await productsRepository.findOne(id);
+    const product = await this.productsRepository.findById(id);
 
     if (!product) {
       throw new AppError('Product not found.');
     }
     redisCache.invalidate('api-teste-PRODUCTS_LIST');
 
-    await productsRepository.remove(product);
+    await this.productsRepository.remove(product);
   }
 }
 

@@ -1,21 +1,24 @@
 import AppError from '@shared/errors/AppError';
-import { getCustomRepository } from 'typeorm';
 import path from 'path';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UserTokensRepository from '../infra/typeorm/repositories/UserTokensRepository';
 import EtherealMail from '@config/mail/EtherealMail';
 import { ISendEmail } from '../domain/models/ISendEmail';
+import { IUserTokensRepository } from '../domain/repositories/IUserTokensRepository';
+import { IUserRepository } from '../domain/repositories/IUsersRepository';
 
 class SendForgotPasswordEmailService {
+  constructor(
+    private usersRepository: IUserRepository,
+    private userTokensRepository: IUserTokensRepository
+    ){}
+
   public async execute({ email }: ISendEmail): Promise<void> {
-    const usersRepository = getCustomRepository(UsersRepository);
-    const userTokensRepository = getCustomRepository(UserTokensRepository);
-    const user = await usersRepository.findByEmail(email);
+
+    const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new AppError('User does not exists.');
     }
 
-    const { token } = await userTokensRepository.generate(user.id);
+    const { token } = await this.userTokensRepository.generate(user.id);
 
     const forgotPasswordTemplate = path.resolve(
       __dirname,
