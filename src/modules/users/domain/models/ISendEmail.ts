@@ -1,3 +1,3 @@
 export interface ISendEmail {
-    email: string;
-  }
+  email: string;
+}

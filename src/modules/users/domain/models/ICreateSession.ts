@@ -1,11 +1,11 @@
-import { IUser } from "./IUser";
+import { IUser } from './IUser';
 
 interface ICreateSessionRequest {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 interface ICreateSessionResponse {
-    user: IUser;
-    token: string;
+  user: IUser;
+  token: string;
 }
-export {ICreateSessionRequest, ICreateSessionResponse};
+export { ICreateSessionRequest, ICreateSessionResponse };

@@ -55,6 +55,5 @@ export default class EtherealMail {
       subject,
       html: await mailTemplate.parse(templateData),
     });
-
   }
 }

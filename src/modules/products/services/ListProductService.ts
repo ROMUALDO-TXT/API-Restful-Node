@@ -1,12 +1,16 @@
 import Product from '@modules/products/infra/typeorm/entities/Product';
 import RedisCache from '@shared/cache/RedisCache';
+import { inject, injectable } from 'tsyringe';
 import { IProductsRepository } from '../domain/repositories/IProductsRepository';
 
+@injectable()
 class ListProductService {
-  constructor(private productsRepository: IProductsRepository){}
+  constructor(
+    @inject('ProductsRepository')
+    private productsRepository: IProductsRepository
+  ) {}
 
   public async execute(): Promise<Product[]> {
-
     const redisCache = new RedisCache();
 
     let products = await redisCache.recover<Product[]>(

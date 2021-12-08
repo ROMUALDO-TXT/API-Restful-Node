@@ -1,4 +1,3 @@
-
 import { IUserToken } from '../models/IUserToken';
 
 export interface IUserTokensRepository {

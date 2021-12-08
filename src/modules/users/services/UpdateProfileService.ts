@@ -1,11 +1,16 @@
 import AppError from '@shared/errors/AppError';
 import { compare, hash } from 'bcryptjs';
+import { inject, injectable } from 'tsyringe';
 import { IUpdateProfile } from '../domain/models/IUpdateProfile';
 import { IUser } from '../domain/models/IUser';
 import { IUserRepository } from '../domain/repositories/IUsersRepository';
 
+@injectable()
 class UpdateProfileService {
-  constructor(private usersRepository: IUserRepository){}
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUserRepository
+  ) {}
 
   public async execute({
     user_id,

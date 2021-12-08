@@ -1,20 +1,21 @@
 import AppError from '@shared/errors/AppError';
 import { hash } from 'bcryptjs';
 import { addHours, isAfter } from 'date-fns';
-import { getCustomRepository } from 'typeorm';
+import { inject, injectable } from 'tsyringe';
 import { IResetPassword } from '../domain/models/IResetPassword';
 import { IUserRepository } from '../domain/repositories/IUsersRepository';
 import { IUserTokensRepository } from '../domain/repositories/IUserTokensRepository';
 
-
+@injectable()
 class ResetPasswordService {
   constructor(
+    @inject('UsersRepository')
     private usersRepository: IUserRepository,
+    @inject('UserTokensRepository')
     private userTokensRepository: IUserTokensRepository,
-  ){}
+  ) {}
 
   public async execute({ token, password }: IResetPassword): Promise<void> {
-
     const userToken = await this.userTokensRepository.findByToken(token);
 
     if (!userToken) {

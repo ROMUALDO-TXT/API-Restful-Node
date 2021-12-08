@@ -12,7 +12,7 @@ import {
 import OrdersProducts from './OrdersProducts';
 
 @Entity('orders')
-class Order implements IOrder{
+class Order implements IOrder {
   @PrimaryGeneratedColumn()
   id: string;
 

@@ -19,7 +19,7 @@ routes.use('/passwords', passwordRouter);
 
 routes.use('/profile', profileRouter);
 
-routes.use('/customers',customersRouter)
+routes.use('/customers', customersRouter);
 
 routes.use('/orders', ordersRouter);
 

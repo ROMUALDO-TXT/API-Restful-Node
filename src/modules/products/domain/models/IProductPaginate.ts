@@ -1,5 +1,4 @@
-import { IProduct } from "./IProduct";
-
+import { IProduct } from './IProduct';
 
 export interface IProductPaginate {
   from: number;

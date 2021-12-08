@@ -5,12 +5,18 @@ import upload from '@config/upload';
 import { IUpdateAvatar } from '../domain/models/IUpdateAvatar';
 import { IUserRepository } from '../domain/repositories/IUsersRepository';
 import { IUser } from '../domain/models/IUser';
+import { inject, injectable } from 'tsyringe';
 
+@injectable()
 class UpdateUserAvatarService {
-  constructor(private usersRepository: IUserRepository){}
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUserRepository) {}
 
-  public async execute({ user_id, avatarFilename }: IUpdateAvatar): Promise<IUser> {
-
+  public async execute({
+    user_id,
+    avatarFilename,
+  }: IUpdateAvatar): Promise<IUser> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
@@ -24,7 +30,7 @@ class UpdateUserAvatarService {
         await fs.promises.unlink(avatarFilePath);
       }
     }
-    user.avatar = avatarFilename;
+    user.avatar = JSON.stringify(avatarFilename);
 
     await this.usersRepository.save(user);
 

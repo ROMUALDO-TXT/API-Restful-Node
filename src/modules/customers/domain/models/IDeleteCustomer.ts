@@ -1,4 +1,3 @@
 export interface IDeleteCustomer {
-    id: string;
+  id: string;
 }
-  

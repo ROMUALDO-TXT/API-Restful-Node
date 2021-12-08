@@ -5,10 +5,10 @@ import { IOrdersRepository } from '@modules/orders/domain/repositories/IOrdersRe
 import { getRepository, Repository } from 'typeorm';
 import Order from '../entities/Order';
 
-class OrdersRepository implements IOrdersRepository {
+export class OrdersRepository implements IOrdersRepository {
   private ormRepository: Repository<Order>;
-  
-  constructor(){
+
+  constructor() {
     this.ormRepository = getRepository(Order);
   }
 
@@ -20,16 +20,20 @@ class OrdersRepository implements IOrdersRepository {
     return order;
   }
 
-  public async findAllPaginate(): Promise<IOrderPaginate>{
-    const orders = await this.ormRepository.createQueryBuilder()
-    .leftJoinAndSelect('orders.customer', 'customer')
-    .leftJoinAndSelect('orders.order_products', 'order_products')
-    .paginate();
+  public async findAllPaginate(): Promise<IOrderPaginate> {
+    const orders = await this.ormRepository
+      .createQueryBuilder()
+      .leftJoinAndSelect('orders.customer', 'customer')
+      .leftJoinAndSelect('orders.order_products', 'order_products')
+      .paginate();
 
     return orders as IOrderPaginate;
   }
 
-  public async createOrder({ customer, products }: ICreateOrder): Promise<IOrder> {
+  public async createOrder({
+    customer,
+    products,
+  }: ICreateOrder): Promise<IOrder> {
     const order = this.ormRepository.create({
       customer,
       order_products: products,
@@ -39,4 +43,4 @@ class OrdersRepository implements IOrdersRepository {
     return order;
   }
 }
-export default OrdersRepository;
+ 

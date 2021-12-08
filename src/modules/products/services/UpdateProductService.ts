@@ -1,11 +1,16 @@
 import Product from '@modules/products/infra/typeorm/entities/Product';
 import RedisCache from '@shared/cache/RedisCache';
 import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
 import { IUpdateProduct } from '../domain/models/IUpdateProduct';
 import { IProductsRepository } from '../domain/repositories/IProductsRepository';
 
+@injectable()
 class UpdateProductService {
-  constructor(private productsRepository: IProductsRepository){}
+  constructor(
+    @inject('ProductsRepository')
+    private productsRepository: IProductsRepository
+  ) {}
   
   public async execute({
     id,

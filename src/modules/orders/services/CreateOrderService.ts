@@ -4,18 +4,23 @@ import { IProductsRepository } from '@modules/products/domain/repositories/IProd
 import { IOrder } from '../domain/models/IOrder';
 import { IRequestCreateOrder } from '../domain/models/IRequestCreateOrder';
 import { IOrdersRepository } from '../domain/repositories/IOrdersRepository';
+import { inject, injectable } from 'tsyringe';
 
-
+@injectable()
 class CreateOrderService {
   constructor(
+    @inject('OrdersRepository')
     private ordersRepository: IOrdersRepository,
+    @inject('CustomersRepository')
     private customersRepository: ICustomersRepository,
+    @inject('ProductsRepository')
     private productsRepository: IProductsRepository,
-    ){}
+  ) {}
 
-
-  public async execute({ customer_id, products }: IRequestCreateOrder): Promise<IOrder> {
-
+  public async execute({
+    customer_id,
+    products,
+  }: IRequestCreateOrder): Promise<IOrder> {
     const customerExists = await this.customersRepository.findById(customer_id);
 
     if (!customerExists) {

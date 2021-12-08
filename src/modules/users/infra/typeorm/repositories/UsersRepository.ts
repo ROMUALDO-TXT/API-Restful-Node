@@ -5,10 +5,9 @@ import { IUserRepository } from '@modules/users/domain/repositories/IUsersReposi
 import { getRepository, Like, Repository } from 'typeorm';
 import User from '../entities/User';
 
-class UsersRepository implements IUserRepository{
-
-  private ormRepository: Repository<User>
-  constructor(){
+export class UsersRepository implements IUserRepository {
+  private ormRepository: Repository<User>;
+  constructor() {
     this.ormRepository = getRepository(User);
   }
 
@@ -41,26 +40,30 @@ class UsersRepository implements IUserRepository{
 
     return user;
   }
-  public async findAll(): Promise<IUser[]>{
+  public async findAll(): Promise<IUser[]> {
     const users = await this.ormRepository.find();
 
     return users;
   }
-  
-  public async findAllPaginate(search: string, sortField: string): Promise<IUserPaginate>{
-    if(search){
-      return await this.ormRepository.createQueryBuilder()
-      .where([{name: Like(`%${search}%`)}, {email: Like(`${search}`)}])
-      .orderBy('User.name', 'ASC')
-      .paginate() as IUserPaginate;
+
+  public async findAllPaginate(
+    search: string,
+    sortField: string,
+  ): Promise<IUserPaginate> {
+    if (search) {
+      return (await this.ormRepository
+        .createQueryBuilder()
+        .where([{ name: Like(`%${search}%`) }, { email: Like(`${search}`) }])
+        .orderBy('User.name', 'ASC')
+        .paginate()) as IUserPaginate;
     }
-    return await this.ormRepository.createQueryBuilder()
-    .orderBy('User.name', 'ASC')
-    .paginate() as IUserPaginate;
-    
+    return (await this.ormRepository
+      .createQueryBuilder()
+      .orderBy('User.name', 'ASC')
+      .paginate()) as IUserPaginate;
   }
-  
-  public async create({name, email, password}: ICreateUser): Promise<IUser>{
+
+  public async create({ name, email, password }: ICreateUser): Promise<IUser> {
     const user = this.ormRepository.create({
       name,
       email,
@@ -68,13 +71,12 @@ class UsersRepository implements IUserRepository{
     });
 
     await this.ormRepository.save(user);
-    
+
     return user;
   }
-  public async save(user: IUser): Promise<IUser>{
+  public async save(user: IUser): Promise<IUser> {
     await this.ormRepository.save(user);
     return user;
   }
 }
 
-export default UsersRepository;

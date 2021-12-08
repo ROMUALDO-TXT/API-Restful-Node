@@ -4,15 +4,18 @@ import EtherealMail from '@config/mail/EtherealMail';
 import { ISendEmail } from '../domain/models/ISendEmail';
 import { IUserTokensRepository } from '../domain/repositories/IUserTokensRepository';
 import { IUserRepository } from '../domain/repositories/IUsersRepository';
+import { inject, injectable } from 'tsyringe';
 
+@injectable()
 class SendForgotPasswordEmailService {
   constructor(
+    @inject('UsersRepository')
     private usersRepository: IUserRepository,
-    private userTokensRepository: IUserTokensRepository
-    ){}
-
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
+  ) {}
+  
   public async execute({ email }: ISendEmail): Promise<void> {
-
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new AppError('User does not exists.');

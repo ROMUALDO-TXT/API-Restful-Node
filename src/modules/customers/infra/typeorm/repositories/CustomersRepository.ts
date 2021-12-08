@@ -7,13 +7,10 @@ import Customer from '../entities/Customer';
 
 @EntityRepository(Customer)
 export class CustomersRepository implements ICustomersRepository {
-  
   private ormRepository: Repository<Customer>;
-  constructor(){
+  constructor() {
     this.ormRepository = getRepository(Customer);
   }
-
-
 
   public async findByName(name: string): Promise<Customer | undefined> {
     const customer = await this.ormRepository.findOne({
@@ -45,31 +42,31 @@ export class CustomersRepository implements ICustomersRepository {
     return customer;
   }
 
-  public async findAll(): Promise<ICustomer[]>{
+  public async findAll(): Promise<ICustomer[]> {
     const customers = await this.ormRepository.find();
 
     return customers;
   }
 
-  public async findAllPaginate(): Promise<ICustomerPaginate>{
+  public async findAllPaginate(): Promise<ICustomerPaginate> {
     const customers = await this.ormRepository.createQueryBuilder().paginate();
 
     return customers as ICustomerPaginate;
   }
 
-    public async create({name, email}: ICreateCustomer): Promise<ICustomer>{
-    const customer = this.ormRepository.create({name,email});
+  public async create({ name, email }: ICreateCustomer): Promise<ICustomer> {
+    const customer = this.ormRepository.create({ name, email });
 
     await this.ormRepository.save(customer);
 
-    return customer;  
+    return customer;
   }
 
-  public async save(customer: ICustomer): Promise<ICustomer>{
+  public async save(customer: ICustomer): Promise<ICustomer> {
     await this.ormRepository.save(customer);
     return customer;
   }
-  
+
   public async remove(customer: Customer): Promise<void> {
     await this.ormRepository.remove(customer);
   }
